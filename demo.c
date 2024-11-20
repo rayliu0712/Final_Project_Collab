@@ -4,7 +4,7 @@ int main() {
 	Curses_Init(); // 初始化Curses，必須放在最前面
 
 	int month = 11, day = 21;
-	Curses_MoveAndPrint(0, 0, "Today is %d/%d, Press Enter to continue", month, day);
+	Curses_Move_Print(0, 0, "Today is %d/%d, Press Enter to continue", month, day);
 	// 第一個參數傳入y(第y行)
 	// 第二個參數傳入x(第x列)
 	// 第三個參數之後用法和printf相同
@@ -20,11 +20,11 @@ int main() {
 
 	Curses_Clear(); // 清除螢幕
 
-	Curses_PrintCentrally("CENTER 1\nPress Any Key to continue"); // 輸出在正中間(支援多行)
+	Curses_PrintCenter("CENTER 1\nPress Any Key to continue"); // 輸出在正中間(支援多行)
 
 	Curses_GetChar();
 
-	Curses_ClearAndPrintCentrally("CENTER 2\nPress Any Key to continue"); // 清除 + 輸出在正中間
+	Curses_NewCenter("CENTER 2\nPress Any Key to continue"); // 清除 + 輸出在正中間
 
 	Curses_GetChar();
 

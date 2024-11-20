@@ -24,7 +24,7 @@ void Curses_Print(const char *fmt, ...) {
 	va_end(args);
 }
 
-void Curses_MoveAndPrint(int y, int x, const char *fmt, ...) {
+void Curses_Move_Print(int y, int x, const char *fmt, ...) {
 	va_list args;
 	va_start(args, fmt);
 	move(y, x);
@@ -32,7 +32,7 @@ void Curses_MoveAndPrint(int y, int x, const char *fmt, ...) {
 	va_end(args);
 }
 
-void _V_PrintCentrally(const char *fmt, va_list args) {
+void _Curses_V_PrintCenter(const char *fmt, va_list args) {
 	char *s = (char *)calloc(COLS * 2, sizeof(char));
 	vsprintf(s, fmt, args);
 	char **lines = (char **)calloc(LINES * 2, sizeof(char *));
@@ -47,24 +47,24 @@ void _V_PrintCentrally(const char *fmt, va_list args) {
 	int shift = (LINES - n) / 2;
 	for (int i = 0; i < n; i++) {
 		char *line = lines[i];
-		Curses_MoveAndPrint(shift + i, (COLS - strlen(line)) / 2, line);
+		Curses_Move_Print(shift + i, (COLS - strlen(line)) / 2, line);
 	}
 
 	free(s);
 	free(lines);
 }
 
-void Curses_PrintCentrally(const char *fmt, ...) {
+void Curses_PrintCenter(const char *fmt, ...) {
 	va_list args;
 	va_start(args, fmt);
-	_V_PrintCentrally(fmt, args);
+	_Curses_V_PrintCenter(fmt, args);
 	va_end(args);
 }
 
-void Curses_ClearAndPrintCentrally(const char *fmt, ...) {
+void Curses_NewCenter(const char *fmt, ...) {
 	va_list args;
 	va_start(args, fmt);
 	Curses_Clear();
-	_V_PrintCentrally(fmt, args);
+	_Curses_V_PrintCenter(fmt, args);
 	va_end(args);
 }
