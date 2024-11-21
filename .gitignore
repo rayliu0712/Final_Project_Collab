@@ -1,6 +1,3 @@
-.vscode/
-build.sh
-
-*.out
-*.c
+*
+!core.h
 !demo.c
