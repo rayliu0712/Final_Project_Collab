@@ -7,12 +7,11 @@
 
 typedef const char *Fmt;
 
-#define Cur_Y (stdscr->_cury)
-#define Cur_X (stdscr->_curx)
-
-#define Cur_End() endwin()
-#define Cur_Clear() clear()
-#define Cur_GetChar() getch()
+static inline void Cur_End() { endwin(); }
+static inline void Cur_Clear() { clear(); }
+static inline int Cur_GetChar() { return getch(); }
+static inline int Cur_GetY() { return getcury(stdscr); }
+static inline int Cur_GetX() { return getcurx(stdscr); }
 
 void Cur_Init(void) {
 	initscr();
@@ -43,22 +42,14 @@ void Cur_Move_Print(int y, int x, Fmt fmt, ...) {
 	va_end(args);
 }
 
-#define _Cur_CENTER -1
-#define _Cur_CLEAR -2
+//
+// print center opts
+//
 
-#define Cur_NewCenter(fmt, ...) _Cur_PrintCenterOpt(_Cur_CLEAR, _Cur_CLEAR, (fmt), ##__VA_ARGS__)
-#define Cur_PrintCenter(fmt, ...) _Cur_PrintCenterOpt(_Cur_CENTER, _Cur_CENTER, (fmt), ##__VA_ARGS__)
+const int _Cur_CENTER = -1;
+const int _Cur_CLEAR = -2;
 
-#define Cur_Print_Xmid(fmt, ...) _Cur_PrintCenterOpt(Cur_Y, _Cur_CENTER, (fmt), ##__VA_ARGS__)
-#define Cur_Move_Print_Xmid(y, fmt, ...) _Cur_PrintCenterOpt((y), _Cur_CENTER, (fmt), ##__VA_ARGS__)
-
-#define Cur_Print_Ymid(fmt, ...) _Cur_PrintCenterOpt(_Cur_CENTER, Cur_X, (fmt), ##__VA_ARGS__)
-#define Cur_Move_Print_Ymid(x, fmt, ...) _Cur_PrintCenterOpt(_Cur_CENTER, (x), (fmt), ##__VA_ARGS__)
-
-void _Cur_PrintCenterOpt(int y, int x, Fmt fmt, ...) {
-	va_list args;
-	va_start(args, fmt);
-
+void _Cur_PrintCenterOpt(int y, int x, Fmt fmt, va_list args) {
 	char *s, **lines;
 	int n = 0;
 	// split by lines
@@ -88,5 +79,46 @@ void _Cur_PrintCenterOpt(int y, int x, Fmt fmt, ...) {
 
 	free(s);
 	free(lines);
+}
+
+void Cur_NewCenter(Fmt fmt, ...) {
+	va_list args;
+	va_start(args, fmt);
+	_Cur_PrintCenterOpt(_Cur_CLEAR, _Cur_CLEAR, fmt, args);
+	va_end(args);
+}
+
+void Cur_PrintCenter(Fmt fmt, ...) {
+	va_list args;
+	va_start(args, fmt);
+	_Cur_PrintCenterOpt(_Cur_CENTER, _Cur_CENTER, fmt, args);
+	va_end(args);
+}
+
+void Cur_Print_Ymid(Fmt fmt, ...) {
+	va_list args;
+	va_start(args, fmt);
+	_Cur_PrintCenterOpt(_Cur_CENTER, Cur_GetX(), fmt, args);
+	va_end(args);
+}
+
+void Cur_Print_Xmid(Fmt fmt, ...) {
+	va_list args;
+	va_start(args, fmt);
+	_Cur_PrintCenterOpt(Cur_GetY(), _Cur_CENTER, fmt, args);
+	va_end(args);
+}
+
+void Cur_Move_Print_Ymid(int x, Fmt fmt, ...) {
+	va_list args;
+	va_start(args, fmt);
+	_Cur_PrintCenterOpt(_Cur_CENTER, x, fmt, args);
+	va_end(args);
+}
+
+void Cur_Move_Print_Xmid(int y, Fmt fmt, ...) {
+	va_list args;
+	va_start(args, fmt);
+	_Cur_PrintCenterOpt(y, _Cur_CENTER, fmt, args);
 	va_end(args);
 }
