@@ -2,13 +2,13 @@
 #include <ncurses.h>
 #include <stdbool.h>
 
-bool *_Get_afPtr(void) {
+bool *_Get_afptr(void) {
 	static bool AutoFlush = true;
 	return &AutoFlush;
 }
 
 #define Flush() refresh()
-#define _af (*_Get_afPtr())
+#define _af (*_Get_afptr())
 #define _AutoFlush() (_af ? Flush() : (void)0)
 #define AutoFlush_Pause() (_af = false)
 
