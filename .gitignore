@@ -1,3 +1,3 @@
-*
-!core.h
-!demo.c
+.vscode/
+build.sh
+test.c
