@@ -3,8 +3,8 @@
 #include <stdbool.h>
 
 bool *_Get_afptr(void) {
-	static bool AutoFlush = true;
-	return &AutoFlush;
+	static bool af = true;
+	return &af;
 }
 
 #define Flush() refresh()
