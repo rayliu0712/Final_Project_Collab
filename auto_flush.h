@@ -9,8 +9,12 @@ bool *_Get_afptr(void) {
 
 #define Flush() refresh()
 #define _af (*_Get_afptr())
-#define _AutoFlush() (_af ? Flush() : (void)0)
 #define AutoFlush_Pause() (_af = false)
+
+void _AutoFlush(void) {
+	if (_af)
+		Flush();
+}
 
 void AutoFlush_Resume(void) {
 	_af = true;
