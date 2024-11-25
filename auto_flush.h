@@ -2,24 +2,18 @@
 #include <ncurses.h>
 #include <stdbool.h>
 
-#define Flush() refresh()
-
-bool *_AutoFlushPtr(void) {
+bool *_Get_afPtr(void) {
 	static bool AutoFlush = true;
 	return &AutoFlush;
 }
 
-void _AutoFlush(void) {
-	if (*_AutoFlushPtr())
-		Flush();
-}
-
-void AutoFlush_Pause(void) {
-	*_AutoFlushPtr() = false;
-}
+#define Flush() refresh()
+#define _af (*_Get_afPtr())
+#define _AutoFlush() (_af ? Flush() : (void)0)
+#define AutoFlush_Pause() (_af = false)
 
 void AutoFlush_Resume(void) {
-	*_AutoFlushPtr() = true;
+	_af = true;
 	Flush();
 }
 
